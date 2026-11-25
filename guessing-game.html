@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Number Guessing Game</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #241B35;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+  }
+  .game {
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+  }
+  h1 { font-size: 26px; margin-bottom: 30px; }
+  .instruction { color: #D6CDEA; font-size: 16px; margin-bottom: 20px; }
+  input {
+    font-size: 22px;
+    width: 160px;
+    text-align: center;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #fff;
+    color: #241B35;
+    margin-bottom: 20px;
+  }
+  button {
+    display: block;
+    margin: 10px auto;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+    padding: 14px 0;
+    width: 220px;
+  }
+  #checkBtn { background: #7B2CBF; }
+  #checkBtn:hover { background: #9D4EDD; }
+  #newBtn { background: #4361EE; margin-top: 25px; }
+  #newBtn:hover { background: #4895EF; }
+  #result { font-size: 18px; font-weight: bold; margin: 25px 0 10px; color: #E0E0E0; min-height: 24px; }
+  #attempts { font-size: 16px; }
+</style>
+</head>
+<body>
+  <div class="game">
+    <h1>🎯 NUMBER GUESSING GAME</h1>
+    <div class="instruction">I'm thinking of a number between 1 and 100</div>
+    <input type="number" id="guess" min="1" max="100" autofocus>
+    <button id="checkBtn" onclick="checkGuess()">CHECK GUESS</button>
+    <div id="result"></div>
+    <div id="attempts">Attempts: 0</div>
+    <button id="newBtn" onclick="newGame()">🔄 NEW GAME</button>
+  </div>
+
+<script>
+  let secret, attempts;
+  const guessInput = document.getElementById('guess');
+  const result = document.getElementById('result');
+  const attemptsLabel = document.getElementById('attempts');
+
+  function newGame() {
+    secret = Math.floor(Math.random() * 100) + 1;
+    attempts = 0;
+    guessInput.value = '';
+    guessInput.disabled = false;
+    result.textContent = 'Guess a number between 1 and 100';
+    result.style.color = '#E0E0E0';
+    attemptsLabel.textContent = 'Attempts: 0';
+    guessInput.focus();
+  }
+
+  function checkGuess() {
+    const guess = parseInt(guessInput.value, 10);
+
+    if (isNaN(guess)) {
+      alert('Please enter a valid number.');
+      return;
+    }
+    if (guess < 1 || guess > 100) {
+      alert('Enter a number between 1 and 100.');
+      return;
+    }
+
+    attempts++;
+    attemptsLabel.textContent = 'Attempts: ' + attempts;
+
+    if (guess < secret) {
+      result.textContent = '⬆ Too Low! Try again.';
+      result.style.color = '#FFD166';
+    } else if (guess > secret) {
+      result.textContent = '⬇ Too High! Try again.';
+      result.style.color = '#FF9F1C';
+    } else {
+      result.textContent = '🎉 Correct! The number was ' + secret;
+      result.style.color = '#06D6A0';
+      guessInput.disabled = true;
+      setTimeout(() => alert('You guessed the number in ' + attempts + ' attempts!'), 100);
+    }
+  }
+
+  guessInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') checkGuess();
+  });
+
+  newGame();
+</script>
+</body>
+</html>
